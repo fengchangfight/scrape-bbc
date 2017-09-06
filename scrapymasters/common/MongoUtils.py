@@ -5,6 +5,7 @@ class MongoUtils:
     def __init__(self):
         pass
 
+    # ==fc== create mongo client from config file
     @staticmethod
     def create_client_from_config(config):
         if config["username"] == "" and config["password"] == "":
@@ -15,6 +16,7 @@ class MongoUtils:
                              + "/" + config["dbname"])
         return client
 
+    # ==fc== a kind of search article by url
     @staticmethod
     def find_article_by_url(db, url):
         cursor = db.articles.find({"url": url})
@@ -25,6 +27,7 @@ class MongoUtils:
 
         return result
 
+    #==fc== search logic : word->url->article
     @staticmethod
     def find_article_by_word(db, word):
         word_index = db.words.find({"word": word})
@@ -35,10 +38,12 @@ class MongoUtils:
                 result.append(MongoUtils.find_article_by_url(db, url))
         return result
 
+    #==fc== just find all articles
     @staticmethod
     def find_all_articles(db):
         return db.articles.find()
 
+    # ==fc== just find all words from words table
     @staticmethod
     def find_all_words(db):
         return db.words.find()

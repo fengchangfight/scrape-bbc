@@ -5,6 +5,7 @@ class Indexer:
     def __init__(self):
         pass
 
+    # ==fc== build index from splitting words in article body, it returns the index dict
     @staticmethod
     def map_bodywords_to_articles(articles):
         article_word_index = {}

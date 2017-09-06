@@ -3,12 +3,14 @@ from scrapymasters.common.MongoUtils import MongoUtils
 
 
 class MongoWriterPipeline(object):
+    # ==fc== init mongo client
     def __init__(self):
         config = ConfigFiles.config()
         self.client = MongoUtils.create_client_from_config(config)
         self.db = self.client.scrape
         self.bulk = self.db.articles.initialize_ordered_bulk_op()
 
+    # ==fc== write into db article
     def process_item(self, article, spider):
         stripped_article = {
             "title": article["title"],
@@ -22,6 +24,7 @@ class MongoWriterPipeline(object):
         self.bulk.insert(stripped_article)
         return article
 
+    # ==fc== execute and close connection to mongo
     def close_spider(self, spider):
         result = self.bulk.execute()
         print("Article write result:")
