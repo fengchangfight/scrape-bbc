@@ -36,6 +36,7 @@ class IndexerPipeline(object):
     """
     def process_item(self, article, spider):
         body = article['body']
+
         for word in body.split():
             word = word.strip(punctuation).lower()
 
@@ -43,7 +44,12 @@ class IndexerPipeline(object):
                 url = article['url']
                 word_query = { "word": word }
                 url_to_insert = {"$addToSet": {"urls": url }}
+
+                if self.db.words.find(word_query).count()==0:
+                   self.db.words.insert(word_query);
+
                 self.bulk.find(word_query).update(url_to_insert)
+
         return article
 
     # ==fc== execute index and then Disconnect from MongoDB.
